@@ -8,6 +8,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
+// Use environment variable for API URL, fallback to localhost for development
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 
 
@@ -19,7 +21,7 @@ export default function RegisterPage(){
 
     const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
-        const response = await fetch('http://localhost:3001/api/auth/register', {
+        const response = await fetch(`${API_URL}/api/auth/register`, {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ email, name, password }),

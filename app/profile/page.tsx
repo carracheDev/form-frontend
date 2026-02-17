@@ -4,6 +4,9 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+// Use environment variable for API URL, fallback to localhost for development
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+
 interface User {
     userId: number;
     email:string;
@@ -21,7 +24,7 @@ export default function Profile() {
         return;
       }
 
-      const response = await fetch('http://localhost:3001/api/auth/profile', {
+      const response = await fetch(`${API_URL}/api/auth/profile`, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
       if (response.ok) {
