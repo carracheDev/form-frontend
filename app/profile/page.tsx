@@ -17,18 +17,18 @@ export default function Profile() {
     const fetchProfile = async () => {
       const token = localStorage.getItem('token');
       if (!token) {
-        router.push('/auth/login');
+        router.push('/login');
         return;
       }
 
-      const response = await fetch('http://localhost:3001/auth/profile', {
+      const response = await fetch('http://localhost:3001/api/auth/profile', {
         headers: { 'Authorization': `Bearer ${token}` },
       });
       if (response.ok) {
         const userData = await response.json();
         setUser(userData);
       } else {
-        router.push('/auth/login');
+        router.push('/login');
       }
     };
 
