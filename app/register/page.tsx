@@ -8,8 +8,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-// Use environment variable for API URL, fallback to localhost for development
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+// Use environment variable for API URL, fallback to Railway production for production builds
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://formulaire-backend.up.railway.app';
 
 
 

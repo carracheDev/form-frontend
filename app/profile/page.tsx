@@ -4,8 +4,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-// Use environment variable for API URL, fallback to localhost for development
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+// Use environment variable for API URL, fallback to Railway production for production builds
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://formulaire-backend.up.railway.app';
 
 interface User {
     userId: number;
