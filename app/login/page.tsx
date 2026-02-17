@@ -6,16 +6,11 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
-// Use environment variable for API URL, fallback to Railway production for production builds
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://formulaire-backend.up.railway.app';
-
-
-
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://form-backend-production-aeca.up.railway.app/api';
 
 export default function Login(){
     const [email, setEmail]=useState('');
     const [password, setPassword]=useState('');
-    // état pour les erreurs de soumission ou de validation
     const [error, setError] = useState<string | null>(null);
 
     const router= useRouter();
@@ -23,14 +18,13 @@ export default function Login(){
     const handlSubmit = async (e: { preventDefault: () => void; })=>{
         e.preventDefault();
 
-        // validation côté client simple
         if (!email || !password) {
             setError('Veuillez remplir tous les champs.');
             return;
         }
 
         try {
-            const response= await fetch(`${API_URL}/api/auth/login`, {
+            const response= await fetch(`${API_URL}/auth/login`, {
                 method: 'POST',
                 headers:{'Content-Type': 'application/json'},
                 body: JSON.stringify({email, password})
@@ -41,7 +35,6 @@ export default function Login(){
                 localStorage.setItem('token', access_token);
                 router.push('/profile');
             } else {
-                // récupération du message d'erreur renvoyé par l'API
                 const data = await response.json();
                 setError(data.message || 'Erreur lors de la connexion.');
             }
@@ -56,7 +49,6 @@ export default function Login(){
             <div className="text-center">
                 <h1 className="font-bold text-lg text-red-600">Connexion</h1>
             </div>
-            {/* affichage conditionnel du message d'erreur */}
             {error && (
                 <p className="text-center text-red-600  mb-4">
                     {error}

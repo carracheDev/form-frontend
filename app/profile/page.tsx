@@ -1,11 +1,9 @@
-// pages/profile.js
 "use client"
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-// Use environment variable for API URL, fallback to Railway production for production builds
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://formulaire-backend.up.railway.app';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://form-backend-production-aeca.up.railway.app/api';
 
 interface User {
     userId: number;
@@ -24,7 +22,7 @@ export default function Profile() {
         return;
       }
 
-      const response = await fetch(`${API_URL}/api/auth/profile`, {
+      const response = await fetch(`${API_URL}/auth/profile`, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
       if (response.ok) {
@@ -41,7 +39,6 @@ export default function Profile() {
   if (!user) return <div>Chargement...</div>;
 
   return (
-
    <main className='container'>
      <div className=' m-auto text-center my-24'>
       <div className=' flex flex-col gap-3'>
