@@ -11,19 +11,40 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://form-backend-product
 export default function RegisterPage(){
     const [email, setEmail]= useState('');
     const [name, setName]= useState('');
-    const [password, setPassword] = useState('')
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
     const router = useRouter();
 
     const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
-        const response = await fetch(`${API_URL}/auth/register`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, name, password }),
-        });
+        setError(null);
+        setLoading(true);
 
-        if (response.ok) {
-            router.push('/login');
+        if (!email || !name || !password) {
+            setError('Veuillez remplir tous les champs.');
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_URL}/auth/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, name, password }),
+            });
+
+            if (response.ok) {
+                router.push('/login');
+            } else {
+                const data = await response.json();
+                setError(data.message || 'Erreur lors de l\'inscription.');
+            }
+        } catch (e) {
+            console.error(e);
+            setError('Impossible de contacter le serveur.');
+        } finally {
+            setLoading(false);
         }
     }
     return(
@@ -31,6 +52,11 @@ export default function RegisterPage(){
             <div className="text-center">
                 <h1 className="font-bold text-lg text-red-600">Inscription</h1>
             </div>
+            {error && (
+                <p className="text-center text-red-600 mb-4">
+                    {error}
+                </p>
+            )}
         <div className="">
             <form onSubmit={handleSubmit} className="flex flex-col gap-3 px-5">
             <label htmlFor="email" className="text-md md:text-lg font-semibold text-red-500">Email: </label>
@@ -55,7 +81,9 @@ export default function RegisterPage(){
             onChange={(e)=> setPassword(e.target.value)}
             ></Input>
                 <div className="flex items-center gap-4 justify-end">
-                            <Button variant="outline" className="text-red-600 border border-red-500 text-md font-semibold md:text-lg hover:bg-red-800 hover:text-white" type="submit">S'inscrire</Button>
+                            <Button variant="outline" className="text-red-600 border border-red-500 text-md font-semibold md:text-lg hover:bg-red-800 hover:text-white" type="submit" disabled={loading}>
+                                {loading ? 'Inscription...' : 'S\'inscrire'}
+                            </Button>
                             <Link href={"/login"}>                             
                             <Button className="bg-red-500 font-semibold text-lg hover:outline hover:bg-white hover:text-red-600 hover:border-red-400 hover:border-2">se connecter</Button>
                             </Link>
